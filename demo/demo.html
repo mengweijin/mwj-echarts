@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="../js/jquery-3.3.1.js"></script>
+    <script src="../js/echarts-4.2.1-rc.1.js"></script>
+    <script src="../theme/wonderland.js"></script>
+    <script src="../mwj-echarts.js"></script>
+</head>
+<body>
+    <div class="mwj-echarts-canvas"></div>
+
+    <script>
+        let width = $('body').width()/2-10;
+        let height = 430;
+
+        let config = {
+            type: "pie",
+            theme: "wonderland",
+            data_pie: [
+                {value:335, name:'直接访问'},
+                {value:310, name:'邮件营销'},
+                {value:234, name:'联盟广告'},
+                {value:135, name:'视频广告'},
+                {value:1548, name:'搜索引擎'}],
+            /*
+            url: "http://localhost:80//system/report/educationData",
+            request_params: {taskId: 1},
+            data_key: "data",
+            name_key: "education",
+            value_key: "quantity",
+            */
+        };
+
+
+        config = {
+            type: "line",
+            theme: "wonderland",
+            data_bar: {
+                legend: ['蒸发量','降水量'],
+                xAxisType: "category",
+                category: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+                value: [[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                    [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
+                ]
+            },
+            options: {
+                yAxis: {
+                    axisLabel: {
+                        formatter: "{value} ml"
+                    }
+                }
+            }
+        };
+
+        let chart = $(".mwj-echarts-canvas")
+            .css("width", width)
+            .css("height", height)
+            .css("display", "inline-block")
+            .css("margin-bottom", "30px")
+            .addClass("mwj-border")
+            .mwjECharts(config);
+
+        console.log(chart.exportToPng());
+    </script>
+</body>
+</html>
