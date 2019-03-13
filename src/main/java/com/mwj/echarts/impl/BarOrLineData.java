@@ -1,8 +1,8 @@
 package com.mwj.echarts.impl;
 
+import com.mwj.echarts.emums.AxisType;
 import com.mwj.echarts.interf.ChartData;
 import lombok.Data;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -12,6 +12,19 @@ import java.util.List;
  **/
 @Data
 public class BarOrLineData implements ChartData {
+
+    /**
+     * 坐标图水平坐标类型，默认为“category”即柱状图默认为垂直柱状图。
+     * 通俗理解为：
+     * category: 横坐标为类别轴，柱状图展示为垂直柱状图；
+     * value: 横坐标为值，纵坐标为类别轴，柱状图展示为水平柱状图；
+     */
+    private String axisType = AxisType.CATEGORY.getValue();
+
+    /**
+     * 是否为堆积图的标志
+     */
+    private boolean stack = false;
 
     /**
      * 图例。['蒸发量','降水量']
@@ -30,4 +43,5 @@ public class BarOrLineData implements ChartData {
      *     ]
      */
     private List<List<String>> value = Collections.emptyList();
+
 }

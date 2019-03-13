@@ -39,16 +39,10 @@
             let config = {
                 /**
                  * 图表类型：
-                 * pie                              饼图
-                 * bar_vertical                     垂直柱状图
-                 * line_vertical                    折线图，横向
-                 * bar_horizontal                   水平柱状图
-                 * line_horizontal                  折线图，竖向
-                 * bar_stack_vertical               垂直堆积柱状图
-                 * line_stack_vertical              折线图，横向，多条
-                 * bar_stack_horizontal             水平堆积柱状图
-                 * line_stack_horizontal            折线图，竖向，多条
-                 * tree                             树图
+                 * pie            饼图
+                 * bar            柱状图（组合图、堆积图）
+                 * line           折线图
+                 * tree           树图
                  */
                 type: null,
                 title: "",              // 图表标题
@@ -143,8 +137,10 @@
             };
 
             /**
-             * bar_vertical or line_vertical chart
+             * bar or line chart
              * config.data = {
+                    axisType: 'category',
+                    stack: false,
                     legend: ['蒸发量','降水量'],
                     category: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
                     value: [
@@ -154,16 +150,8 @@
                }
              * @param config
              */
-            let barOrLineVerticalChart = function(config){
+            let barOrLineChart = function(config){
                 let series = [];
-
-                /**
-                 * 修正echarts类型：
-                 * bar_vertical : bar
-                 * line_vertical : line
-                 * @type {*|string}
-                 */
-                config.type = config.type.split("_")[0];
 
                 if(config.data.legend.length > 0) {
                     $.each(config.data.legend, function(index, seriesName) {
@@ -171,11 +159,13 @@
                             name: seriesName,
                             type: config.type,
                             data: config.data.value[index],
+                            // 堆积图配置
+                            stack: config.data.stack ? config.title : null,
                             itemStyle: {
                                 normal: {
                                     label: {
                                         show: true,
-                                        position: 'top',
+                                        position: config.data.stack ? 'inside' : (config.data.axisType == 'value' ? 'right' : 'top'),
                                         formatter:function(params){
                                             return params.value == 0 ? '' : params.value;
                                         }
@@ -186,6 +176,16 @@
                         };
                         series.push(seriesItem);
                     });
+                }
+
+                let xAxis = {};
+                let yAxis = {};
+                if(config.data.axisType == 'value'){
+                    xAxis = {type: 'value'};
+                    yAxis = {type: 'category', data : config.data.category};
+                } else {
+                    xAxis = {type: 'category', data : config.data.category};
+                    yAxis = {type: 'value'};
                 }
 
                 let options = {
@@ -208,198 +208,11 @@
                             restore: {show: true}
                         }
                     },
-                    xAxis: {type: 'category', data : config.data.category},
-                    yAxis: {type: 'value'},
+                    xAxis: xAxis,
+                    yAxis: yAxis,
                     series: series,
                     animation: false
                 };
-
-                return options;
-            };
-
-            /**
-             * bar or line horizontal chart
-             * config.data = {
-                    legend: ['蒸发量','降水量'],
-                    category: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-                    value: [
-                              [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
-                              [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-                    ]
-               }
-             * @param config
-             */
-            let barOrLineHorizontalChart = function(config){
-                let series = [];
-
-                /**
-                 * 修正echarts类型：
-                 * bar_horizontal : bar
-                 * line_horizontal : line
-                 * @type {*|string}
-                 */
-                config.type = config.type.split("_")[0];
-
-                if(config.data.legend.length > 0) {
-                    $.each(config.data.legend, function(index, seriesName) {
-                        let seriesItem = {
-                            name: seriesName,
-                            type: config.type,
-                            data: config.data.value[index],
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: true,
-                                        position: 'right',
-                                        formatter:function(params){
-                                            return params.value == 0 ? '' : params.value;
-                                        }
-                                    }
-                                }
-                            },
-                            barGap: '1%'
-                        };
-                        series.push(seriesItem);
-                    });
-                }
-
-                let options = {
-                    title: { text: config.title},
-                    legend: { data: config.data.legend, left: 'center', top: 'bottom' },
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: { type: 'shadow' }
-                    },
-                    toolbox: {
-                        show: true,
-                        itemSize: 15,
-                        itemGap: 15,
-                        left: 'right',
-                        top: 'top',
-                        feature: {
-                            magicType: {show: true, type: ['line', 'bar'] },
-                            saveAsImage: {show: true},
-                            dataView: {show: true},
-                            restore: {show: true}
-                        }
-                    },
-                    xAxis: {type: 'value'},
-                    yAxis: {type: 'category', data : config.data.category},
-                    series: series,
-                    animation: false
-                };
-
-                return options;
-            };
-
-            /**
-             * bar or line stack vertical chart
-             * config.data = {
-                    legend: ['直接访问', '邮件营销','联盟广告','视频广告','搜索引擎'],
-                    category: ['周一','周二','周三','周四','周五','周六','周日'],
-                    value: [
-                        [320, 302, 301, 334, 390, 330, 320],
-                        [120, 132, 101, 134, 90, 230, 210],
-                        [220, 182, 191, 234, 290, 330, 310],
-                        [150, 212, 201, 154, 190, 330, 410],
-                        [820, 832, 901, 934, 1290, 1330, 1320]
-                    ]
-               }
-             * @param config
-             */
-            let barOrLineStackVerticalChart = function(config){
-                /**
-                 * 修正echarts类型：
-                 * bar_stack_vertical : bar
-                 * line_stack_vertical : line
-                 * @type {*|string}
-                 */
-                config.type = config.type.split("_")[0];
-
-                let options = barOrLineVerticalChart(config);
-
-                // 准备新的series数据
-                let series = [];
-                if(config.data.legend.length > 0) {
-                    $.each(config.data.legend, function(index, seriesName) {
-                        let seriesItem = {
-                            name: seriesName,
-                            type: config.type,
-                            data: config.data.value[index],
-                            stack: config.title,
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: true,
-                                        position: 'inside',
-                                        formatter:function(params){
-                                            return params.value == 0 ? '' : params.value;
-                                        }
-                                    }
-                                }
-                            }
-                        };
-                        series.push(seriesItem);
-                    });
-                }
-
-                options.series = series;
-
-                return options;
-            };
-
-            /**
-             * bar or line stack horizontal chart
-             * config.data = {
-                    legend: ['直接访问', '邮件营销','联盟广告','视频广告','搜索引擎'],
-                    category: ['周一','周二','周三','周四','周五','周六','周日'],
-                    value: [
-                        [320, 302, 301, 334, 390, 330, 320],
-                        [120, 132, 101, 134, 90, 230, 210],
-                        [220, 182, 191, 234, 290, 330, 310],
-                        [150, 212, 201, 154, 190, 330, 410],
-                        [820, 832, 901, 934, 1290, 1330, 1320]
-                    ]
-               }
-             * @param config
-             */
-            let barOrLineStackHorizontalChart = function(config){
-                /**
-                 * 修正echarts类型：
-                 * bar_stack_horizontal : bar
-                 * line_stack_horizontal : line
-                 * @type {*|string}
-                 */
-                config.type = config.type.split("_")[0];
-
-                let options = barOrLineHorizontalChart(config);
-
-                // 准备新的series数据
-                let series = [];
-                if(config.data.legend.length > 0) {
-                    $.each(config.data.legend, function(index, seriesName) {
-                        let seriesItem = {
-                            name: seriesName,
-                            type: config.type,
-                            data: config.data.value[index],
-                            stack: config.title,
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: true,
-                                        position: 'inside',
-                                        formatter:function(params){
-                                            return params.value == 0 ? '' : params.value;
-                                        }
-                                    }
-                                }
-                            }
-                        };
-                        series.push(seriesItem);
-                    });
-                }
-
-                options.series = series;
 
                 return options;
             };
@@ -485,21 +298,9 @@
                     case "pie":
                         options = pieChart(config);
                         break;
-                    case "bar_vertical":
-                    case "line_vertical":
-                        options = barOrLineVerticalChart(config);
-                        break;
-                    case "bar_horizontal":
-                    case "line_horizontal":
-                        options = barOrLineHorizontalChart(config);
-                        break;
-                    case "bar_stack_vertical":
-                    case "line_stack_vertical":
-                        options = barOrLineStackVerticalChart(config);
-                        break;
-                    case "bar_stack_horizontal":
-                    case "line_stack_horizontal":
-                        options = barOrLineStackHorizontalChart(config);
+                    case "bar":
+                    case "line":
+                        options = barOrLineChart(config);
                         break;
                     case "tree":
                         options = treeChart(config);
@@ -537,7 +338,6 @@
                 });
             };
 
-
             // 初始化echarts对象，this为jquery对象
             let chart = echarts.init(this.get(0), config.theme);
 
@@ -562,6 +362,7 @@
                     },
                     error: function(result){
                         console.log('error: ' + result);
+                        chart.hideLoading();
                     }
                 });
             }

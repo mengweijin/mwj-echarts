@@ -12,6 +12,13 @@
     <url></url>
     <description>mwj-echarts  打成webjars使用</description>
 
+    <developers>
+        <developer>
+            <name>mengweijin</name>
+            <email>mengweijin.work@foxmail.com</email>
+        </developer>
+    </developers>
+
 
     <packaging>jar</packaging>
 
