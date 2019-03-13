@@ -5,6 +5,8 @@
 
 依赖集成：jquery 3.3.1、echarts 4.1.0-release。
 
+demo工程地址：https://gitee.com/mengweijin/mwj-echarts-demo
+
 目前支持以下类型图表：
 
 类别|描述
@@ -103,7 +105,7 @@ let $demo = $("#demo")
 <script th:src="@{/webjars/mwj-echarts/mwj-echarts.js}"></script>
 ```
 
-3、饼图使用示例（其他图表使用详情参考：https://gitee.com/mengweijin/mwj-echarts-demo）：
+3、饼图使用示例，其他图表使用详情参考：https://gitee.com/mengweijin/mwj-echarts-demo
 ```
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
