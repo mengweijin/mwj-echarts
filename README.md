@@ -5,6 +5,15 @@
 
 依赖集成：jquery 3.3.1、echarts 4.1.0-release。
 
+将本项目使用maven打包成jar，并安装到自己本地的maven仓库或者私服，然后添加到自己的工程里。如下：
+```
+<dependency>
+    <groupId>com.mwj</groupId>
+    <artifactId>mwj-echarts</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
 demo工程地址：https://gitee.com/mengweijin/mwj-echarts-demo
 
 目前支持以下类型图表：
@@ -42,36 +51,22 @@ tree            |   树图
 </table>
 
 #### 配置参数说明
+
+参数名|默认值|必填项|描述
+------|------|------|------
+type            |null       |是                                     |图表类型。可选pie（饼图）/bar（柱状图（组合图、堆积图））/line（折线图）/tree（树图）
+title           |           |否                                     |图表标题
+theme           |null       |否                                     |主题（chalk/dark/essos/halloween/infographic/macarons/purple-passion/roma/shine/vintage/walden/westeros/wonderland），如：wonderland, 需要先引入主题wonderland.js文件。可以使用自定义主题，地址：https://echarts.baidu.com/theme-builder/
+options         |{}         |否                                     |用户自定义echarts option，具体参考echarts官方文档
+data            |null       |异步加载：非必填；本地加载：必填           |根据图表类型的不同，会返回不同结构的数据，具体参考各种图的demo（https://gitee.com/mengweijin/mwj-echarts-demo），或者参考ChartData.java的各种实现类。
+ajax.url        |           |异步加载：必填；本地加载：非必填           |异步加载数据url。如果存在config.ajax.url不为空，则优先从该url异步加载数据，否则从本地data加载数据。
+ajax.params     |{}         |否                                     |请求参数
+ajax.type       |GET        |否                                     |ajax请求类型，GET/POST等
+ajax.data_key   |data       |否                                     |请求成功存放数据的集合的变量名
+name_key        |name       |否                                     |数据集对象名称变量名
+value_key       |value      |否                                     |数据集对象名称变量值
+
 ```
-let config = {
-    /**
-     * 图表类型：
-     * pie            饼图
-     * bar            柱状图（组合图、堆积图）
-     * line           折线图
-     * tree           树图
-     */
-    type: null,
-    title: "",              // 图表标题
-    /**
-     * 主题，如：wonderland, 需要线引入主题wonderland.js文件
-     * 可以自定义主题，地址：https://echarts.baidu.com/theme-builder/
-     */
-    theme: null,
-    options: {},            // 用户自定义echarts option，具体参考echarts官方文档
-    data: null,             // 根据图表类型的不同，会返回不同结构的数据，具体参考各种图的demo（https://gitee.com/mengweijin/mwj-echarts-demo）
-    ajax: {
-        url: "",            // 异步加载数据url
-        params: {},         // 请求参数
-        type: "GET",        // 请求类型
-        data_key: "data"    // 请求成功存放数据的集合的变量名
-    },
-    name_key: "name",
-    value_key: "value"
-};
-
-注：默认如果存在config.ajax.url不为空，则从该url异步加载数据，否则从本地data加载数据。
-
 使用方式：
 let $demo = $("#demo")
     .css("width", width)

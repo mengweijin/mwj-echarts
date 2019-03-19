@@ -51,13 +51,15 @@
                  * 可以自定义主题，地址：https://echarts.baidu.com/theme-builder/
                  */
                 theme: null,
-                options: {},            // 用户自定义echarts option，具体参考echarts官方文档
-                data: null,             // 根据图表类型的不同，会返回不同结构的数据，具体参考各种图的demo
+                options: {},                // 用户自定义echarts option，具体参考echarts官方文档
+                data: null,                 // 根据图表类型的不同，会返回不同结构的数据，具体参考各种图的demo
                 ajax: {
-                    url: "",            // 异步加载数据url
-                    params: {},         // 请求参数
-                    type: "GET",        // 请求类型
-                    data_key: "data"    // 请求成功存放数据的集合的变量名
+                    url: "",                // 异步加载数据url
+                    params: {},             // 请求参数
+                    type: "GET",            // 请求类型
+                    data_key: "data",       // 请求成功存放数据的集合的变量名
+                    success_key: "code",    // 请求成功的字段标识名称
+                    success_value: 0,       // 请求成功的值
                 },
                 name_key: "name",
                 value_key: "value"
@@ -306,7 +308,7 @@
                         options = treeChart(config);
                         break;
                     default:
-                        console.error("The config.type is null or undefined!");
+                        console.error("The chart type [" + config.type + "] is not supported!");
                         break;
                 }
 
@@ -346,19 +348,24 @@
 
             let $this = this;
 
-            // 异步加载数据
             if($.isEmptyObject(config.ajax.url)){
                 // 本地加载数据
                 buildCharts(chart, config, $this);
             } else {
+                // 异步加载数据
                 $.ajax({
                     type: config.ajax.type,
                     url: config.ajax.url,
                     data: config.ajax.params,
                     success: function(result){
-                        // 得到数据组
-                        config.data = result[config.ajax.data_key];
-                        buildCharts(chart, config, $this);
+                        if(result[config.ajax.success_key] == config.ajax.success_value){
+                            // 得到数据组
+                            config.data = result[config.ajax.data_key];
+                            buildCharts(chart, config, $this);
+                        } else {
+                            console.log('error: ' + result);
+                            chart.hideLoading();
+                        }
                     },
                     error: function(result){
                         console.log('error: ' + result);
