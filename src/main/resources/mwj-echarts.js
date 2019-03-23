@@ -245,7 +245,7 @@
             };
 
             /**
-             *
+             * 树图
              * @param config
              */
             let treeChart = function(config){
@@ -289,13 +289,53 @@
             };
 
             /**
+             * 仪表盘
+             * @param config
+             */
+            let gaugeChart = function(config){
+                let data = [];
+                for (let i in config.data){
+                    data.push({name: config.data[i][config.name_key], value: config.data[i][config.value_key]});
+                }
+                let options = {
+                    title: { text: config.title},
+                    tooltip : {
+                        formatter: "{a} <br/>{b} : {c}%"
+                    },
+                    toolbox: {
+                        show: true,
+                        itemSize: 15,
+                        itemGap: 15,
+                        left: 'right',
+                        top: 'top',
+                        feature: {
+                            saveAsImage: {show: true},
+                            dataView: {show: true},
+                            restore: {show: true}
+                        }
+                    },
+                    series: [
+                        {
+                            type: "gauge",
+                            name: config.title,
+                            detail: {formatter:'{value}%'},
+                            data: data
+                        }
+                    ],
+                    animation: false
+                };
+
+                return options;
+            };
+
+            /**
              * 根据图表类型渲染图表
              * @param chart echarts对象
              * @param config 配置对象
              * @param $this jquery选择器的实例对象（如：$("div")对象）
              */
             let buildCharts = function(chart, config, $this) {
-                let options = null;
+                let options = {};
                 switch (config.type) {
                     case "pie":
                         options = pieChart(config);
@@ -307,19 +347,19 @@
                     case "tree":
                         options = treeChart(config);
                         break;
+                    case "gauge":
+                        options = gaugeChart(config);
+                        break;
                     default:
                         console.error("The chart type [" + config.type + "] is not supported!");
                         break;
                 }
 
-                // 默认模板样式
+                // jquery深拷贝 config.options 到 options
+                $.extend(true, options, config.options);
+
                 if(!$.isEmptyObject(options)){
                     chart.setOption(options);
-                }
-
-                // 用户自定义样式覆盖
-                if(!$.isEmptyObject(config.options)){
-                    chart.setOption(config.options);
                 }
 
                 // 大小自适应

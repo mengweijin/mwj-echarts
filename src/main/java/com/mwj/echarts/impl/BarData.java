@@ -11,7 +11,7 @@ import java.util.List;
  * @description
  **/
 @Data
-public class BarOrLineData implements ChartData {
+public class BarData implements ChartData {
 
     /**
      * 坐标图水平坐标类型，默认为“category”即柱状图默认为垂直柱状图。
