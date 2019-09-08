@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="demo"></div>
+    <div id="demoAjax"></div>
+
+    <div th:include="include::footer"></div>
+
+<script>
+    let config = {
+        /**
+         * type配置：
+         * 柱状图：bar
+         * 折线图：line
+         */
+        type: "bar",
+        title: "垂直柱状图或折线图标题",
+        theme: "wonderland",
+        options: {},
+        data: {
+            axisType: 'category',
+            stack: false,
+            legend: ['蒸发量','降水量'],
+            category: ['1月','2月','3月','4月','5月','6月'],
+            value: [
+                [2.0, 4.9, 7.0, 23.2, 25.6, 76.7],
+                [2.6, 5.9, 9.0, 26.4, 28.7, 70.7]
+            ]
+        }
+    };
+
+    let width = $('body').width()/2-10;
+    let height = 430;
+    let demo = $("#demo")
+        .css("width", width)
+        .css("height", height)
+        .css("display", "inline-block")
+        .css("margin-bottom", "30px")
+        .mwjECharts(config);
+
+    console.log(demo.get(0).chart);
+    console.log(demo.get(0).chartImage);
+
+
+        let ajaxConfig = {
+            type: "bar",
+            title: "柱状图或折线图标题",
+            theme: "wonderland",
+            options: {},
+            data: null,
+            ajax: {
+                url: "/demo/barOrLineData",
+                params: {},
+                type: "GET",
+                data_key: "data"
+            }
+        };
+    let demoAjax = $("#demoAjax")
+        .css("width", width)
+        .css("height", height)
+        .css("display", "inline-block")
+        .css("margin-bottom", "30px")
+        .mwjECharts(ajaxConfig);
+
+    </script>
+</body>
+</html>

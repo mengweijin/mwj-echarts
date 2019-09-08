@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="demo"></div>
+    <div id="demoAjax"></div>
+
+    <div th:include="include::footer"></div>
+
+    <script>
+
+        let width = $('body').width()/2-10;
+        let height = 430;
+
+        let config = {
+            type: "tree",
+            title: "树图标题",
+            theme: "wonderland",
+            options: {},
+            data: {
+                rootValue: 0,
+                parentKey: "parent",
+                list: [
+                    {id:1, name:'直接访问', parent: 0},
+                    {id:2, name:'邮件营销', parent: 1},
+                    {id:3, name:'联盟广告', parent: 1},
+                    {id:4, name:'视频广告', parent: 2},
+                    {id:5, name:'搜索引擎', parent: 3}]
+            },
+            name_key: "name",
+            value_key: "id"
+        };
+
+        let demo = $("#demo")
+            .css("width", width)
+            .css("height", height)
+            .css("display", "inline-block")
+            .css("margin-bottom", "30px")
+            .mwjECharts(config);
+
+        console.log(demo.get(0).chart);
+        console.log(demo.get(0).chartImage);
+
+
+        let ajaxConfig = {
+            type: "tree",
+            title: "树图标题",
+            theme: "wonderland",
+            options: {},
+            data: null,
+            ajax: {
+                url: "/demo/treeData",
+                params: {},
+                type: "GET",
+                data_key: "data"
+            },
+            name_key: "name",
+            value_key: "id"
+        };
+        let demoAjax = $("#demoAjax")
+            .css("width", width)
+            .css("height", height)
+            .css("display", "inline-block")
+            .css("margin-bottom", "30px")
+            .mwjECharts(ajaxConfig);
+
+    </script>
+</body>
+</html>

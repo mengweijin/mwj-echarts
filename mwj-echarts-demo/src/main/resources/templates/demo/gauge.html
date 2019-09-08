@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="demo"></div>
+    <div id="demoAjax"></div>
+
+    <div th:include="include::footer"></div>
+
+    <script>
+        let width = $('body').width()/2-10;
+        let height = 430;
+
+        let config = {
+            type: "gauge",
+            title: "本地加载仪表盘",
+            theme: "wonderland",
+            options: {},
+            data: [{value:60, name:'成功率'}],
+            name_key: "name",
+            value_key: "value"
+        };
+
+
+        let demo = $("#demo")
+            .css("width", width)
+            .css("height", height)
+            .css("display", "inline-block")
+            .css("margin-bottom", "30px")
+            .mwjECharts(config);
+
+        console.log(demo.get(0).chart);
+        console.log(demo.get(0).chartImage);
+
+        let ajaxConfig = {
+            type: "gauge",
+            title: "异步加载仪表盘",
+            theme: "wonderland",
+            options: {},
+            ajax: {
+                url: "/demo/gaugeData",
+                params: {},
+                type: "GET",
+            },
+            name_key: "name",
+            value_key: "value"
+        };
+        let demoAjax = $("#demoAjax")
+            .css("width", width)
+            .css("height", height)
+            .css("display", "inline-block")
+            .css("margin-bottom", "30px")
+            .mwjECharts(ajaxConfig);
+
+    </script>
+</body>
+</html>

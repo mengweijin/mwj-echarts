@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="demo"></div>
+    <div id="demoAjax"></div>
+
+    <div th:include="include::footer"></div>
+
+    <script>
+        let width = $('body').width()/2-10;
+        let height = 430;
+
+        let config = {
+            type: "pie",
+            title: "本地加载饼图",
+            theme: "wonderland",
+            options: {},
+            data: [
+                {value:335, name:'直接访问'},
+                {value:310, name:'邮件营销'},
+                {value:234, name:'联盟广告'},
+                {value:135, name:'视频广告'},
+                {value:1548, name:'搜索引擎'}],
+            name_key: "name",
+            value_key: "value"
+        };
+
+
+        let demo = $("#demo")
+            .css("width", width)
+            .css("height", height)
+            .css("display", "inline-block")
+            .css("margin-bottom", "30px")
+            .mwjECharts(config);
+
+        console.log(demo.get(0).chart);
+        console.log(demo.get(0).chartImage);
+
+        let ajaxConfig = {
+            type: "pie",
+            title: "异步加载饼图",
+            theme: "wonderland",
+            options: {},
+            data: null,
+            ajax: {
+                url: "/demo/pieData",
+                params: {},
+                type: "GET",
+                data_key: "data"
+            },
+            name_key: "name",
+            value_key: "value"
+        };
+        let demoAjax = $("#demoAjax")
+            .css("width", width)
+            .css("height", height)
+            .css("display", "inline-block")
+            .css("margin-bottom", "30px")
+            .mwjECharts(ajaxConfig);
+
+    </script>
+</body>
+</html>

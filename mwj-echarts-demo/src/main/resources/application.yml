@@ -1,0 +1,9 @@
+server:
+  #\u670D\u52A1\u7AEF\u53E3
+  port: 80
+  servlet:
+    # \u9879\u76EEcontextPath
+    context-path: /
+spring:
+  thymeleaf:
+    cache: false
