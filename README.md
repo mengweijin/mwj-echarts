@@ -14,7 +14,7 @@
 </dependency>
 ```
 
-demo工程地址：[https://gitee.com/mengweijin/mwj-echarts-demo](https://gitee.com/mengweijin/mwj-echarts-demo "mwj-echarts-demo")
+demo工程：mwj-echarts-demo
 
 目前支持以下类型图表：
 
@@ -120,7 +120,7 @@ let $demo = $("#demo")
 <script th:src="@{/webjars/mwj-echarts/mwj-echarts.js}"></script>
 ```
 
-3、饼图使用示例，其他图表使用详情参考：[https://gitee.com/mengweijin/mwj-echarts-demo](https://gitee.com/mengweijin/mwj-echarts-demo "mwj-echarts-demo")
+3、饼图使用示例，其他图表使用详情参考：mwj-echarts-demo
 ```
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
